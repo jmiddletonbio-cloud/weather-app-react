@@ -2,8 +2,19 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import './App.css'
 
+const defaultData = {
+  name: 'San Francisco',
+  main: {
+    temp: 68,
+    feels_like: 65,
+    humidity: 72
+  },
+  weather: [{ main: 'Partly Cloudy' }],
+  wind: { speed: 12 }
+}
+
 function App() {
-  const [data, setData] = useState({})
+  const [data, setData] = useState(defaultData)
   const [location, setLocation] = useState('')
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${process.env.REACT_APP_WEATHER_API_KEY}`
