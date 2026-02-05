@@ -5,6 +5,7 @@ function App() {
   const [data, setData] = useState({})
   const [location, setLocation] = useState('')
 
+  // API key is stored in .env file as REACT_APP_WEATHER_API_KEY to prevent exposure in client-side code
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${process.env.REACT_APP_WEATHER_API_KEY}`
 
   const searchLocation = (event) => {
