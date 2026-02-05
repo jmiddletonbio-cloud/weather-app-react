@@ -60,7 +60,7 @@ describe('App Component', () => {
       render(<App />);
 
       // DEVIN -> Find the input field by placeholder text
-      const inputField = screen.getByPlaceholderText('Enter Location');
+      const inputField = screen.getByPlaceholderText('Search location...');
 
       // DEVIN -> Simulate user typing a location
       fireEvent.change(inputField, { target: { value: 'New York' } });
@@ -84,20 +84,20 @@ describe('App Component', () => {
         expect(screen.getByText('New York')).toBeInTheDocument();
       });
 
-      // DEVIN -> Verify temperature is displayed (75°F rounded)
-      expect(screen.getByText('75°F')).toBeInTheDocument();
+      // DEVIN -> Verify temperature is displayed (75° rounded, new format without F)
+      expect(screen.getByText('75°')).toBeInTheDocument();
 
       // DEVIN -> Verify weather condition is displayed
       expect(screen.getByText('Clear')).toBeInTheDocument();
 
-      // DEVIN -> Verify feels like temperature is displayed
-      expect(screen.getByText('72°F')).toBeInTheDocument();
+      // DEVIN -> Verify feels like temperature is displayed (new format without F)
+      expect(screen.getByText('72°')).toBeInTheDocument();
 
       // DEVIN -> Verify humidity is displayed
       expect(screen.getByText('65%')).toBeInTheDocument();
 
-      // DEVIN -> Verify wind speed is displayed
-      expect(screen.getByText('10 MPH')).toBeInTheDocument();
+      // DEVIN -> Verify wind speed is displayed (new format)
+      expect(screen.getByText('10')).toBeInTheDocument();
     });
 
     // DEVIN -> Test: Non-Enter keys don't trigger API call
@@ -106,7 +106,7 @@ describe('App Component', () => {
       render(<App />);
 
       // DEVIN -> Find the input field by placeholder text
-      const inputField = screen.getByPlaceholderText('Enter Location');
+      const inputField = screen.getByPlaceholderText('Search location...');
 
       // DEVIN -> Simulate user typing a location
       fireEvent.change(inputField, { target: { value: 'New York' } });
@@ -134,7 +134,7 @@ describe('App Component', () => {
       render(<App />);
 
       // DEVIN -> Find the input field by placeholder text
-      const inputField = screen.getByPlaceholderText('Enter Location');
+      const inputField = screen.getByPlaceholderText('Search location...');
 
       // DEVIN -> Simulate user typing a location
       fireEvent.change(inputField, { target: { value: 'New York' } });
@@ -164,14 +164,14 @@ describe('App Component', () => {
         expect(screen.getByText('New York')).toBeInTheDocument();
       });
 
-      // DEVIN -> Verify all weather metrics are displayed
-      expect(screen.getByText('75°F')).toBeInTheDocument();
-      // DEVIN -> Verify feels like temperature
-      expect(screen.getByText('72°F')).toBeInTheDocument();
+      // DEVIN -> Verify all weather metrics are displayed (new format without F)
+      expect(screen.getByText('75°')).toBeInTheDocument();
+      // DEVIN -> Verify feels like temperature (new format without F)
+      expect(screen.getByText('72°')).toBeInTheDocument();
       // DEVIN -> Verify humidity percentage
       expect(screen.getByText('65%')).toBeInTheDocument();
-      // DEVIN -> Verify wind speed
-      expect(screen.getByText('10 MPH')).toBeInTheDocument();
+      // DEVIN -> Verify wind speed (new format)
+      expect(screen.getByText('10')).toBeInTheDocument();
     });
   });
 });
