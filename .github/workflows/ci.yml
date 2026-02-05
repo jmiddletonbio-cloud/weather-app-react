@@ -1,0 +1,51 @@
+# DEVIN -> GitHub Actions CI workflow for running tests
+name: CI
+
+# DEVIN -> Trigger on push and pull request events
+on:
+  # DEVIN -> Run on push to main branch
+  push:
+    branches: [main]
+  # DEVIN -> Run on pull requests to main branch
+  pull_request:
+    branches: [main]
+
+# DEVIN -> Define jobs to run
+jobs:
+  # DEVIN -> Test job definition
+  test:
+    # DEVIN -> Run on Ubuntu latest
+    runs-on: ubuntu-latest
+
+    # DEVIN -> Job steps
+    steps:
+      # DEVIN -> Checkout repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # DEVIN -> Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          # DEVIN -> Use Node.js version 18
+          node-version: '18'
+          # DEVIN -> Cache npm dependencies
+          cache: 'npm'
+
+      # DEVIN -> Install project dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # DEVIN -> Run unit tests
+      - name: Run tests
+        run: npm test -- --watchAll=false --coverage
+        env:
+          # DEVIN -> Disable CI=true to prevent treating warnings as errors
+          CI: true
+
+      # DEVIN -> Build the application to verify no build errors
+      - name: Build
+        run: npm run build
+        env:
+          # DEVIN -> Provide placeholder API key for build (not used in tests)
+          REACT_APP_WEATHER_API_KEY: ${{ secrets.REACT_APP_WEATHER_API_KEY }}
