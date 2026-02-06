@@ -14,9 +14,9 @@ const defaultData = {
 }
 
 function App() {
-    const [data, setData] = useState(defaultData)
-    const [location, setLocation] = useState('')
-    const [error, setError] = useState(null)
+  const [data, setData] = useState(defaultData)
+  const [location, setLocation] = useState('')
+  const [error, setError] = useState(null)
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${process.env.REACT_APP_WEATHER_API_KEY}`
 
@@ -28,7 +28,7 @@ function App() {
           setData(response.data)
         })
         .catch((error) => {
-          console.error('API request failed:', error) // <------- ADDED: prints error to console
+          console.error('API request failed:', error)
           const status = error.response?.status
           if (status === 401 || status === 403) {
             setError('API authentication failed. Please check your API key configuration.')
