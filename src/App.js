@@ -28,6 +28,7 @@ function App() {
           setData(response.data)
         })
         .catch((error) => {
+          console.error('API request failed:', error)
           const status = error.response?.status
           if (status === 401 || status === 403) {
             setError('API authentication failed. Please check your API key configuration.')
