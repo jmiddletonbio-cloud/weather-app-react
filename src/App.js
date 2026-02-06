@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+// <-- DEVIN: Import React hooks for state management and side effects
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
 
@@ -17,6 +18,23 @@ function App() {
   const [data, setData] = useState(defaultData)
   const [location, setLocation] = useState('')
   const [error, setError] = useState(null)
+  
+  // <-- DEVIN: Theme state with localStorage persistence - defaults to 'light' if no saved preference
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+
+  // <-- DEVIN: Apply theme to document root element when theme changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  // <-- DEVIN: Toggle function to switch between light and dark themes
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${process.env.REACT_APP_WEATHER_API_KEY}`
 
@@ -58,6 +76,14 @@ function App() {
 
   return (
     <div className="app">
+      {/* <-- DEVIN: Theme toggle button positioned in upper right corner */}
+      <button 
+        className="theme-toggle" 
+        onClick={toggleTheme}
+        aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+      >
+        {theme === 'light' ? '🌙' : '☀️'}
+      </button>
       <div className="glass-container">
         <div className="search-container">
           <input

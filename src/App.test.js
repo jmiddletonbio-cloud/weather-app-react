@@ -272,6 +272,8 @@ describe('App Component', () => {
 
     // DEVIN -> Test: State updates after successful search
     test('Input field is cleared after successful search', async () => {
+      // DEVIN -> Clear localStorage before test
+      localStorage.clear();
       // DEVIN -> Setup axios mock to resolve with weather data
       mockedAxios.get.mockResolvedValueOnce({ data: mockWeatherData });
 
@@ -317,6 +319,97 @@ describe('App Component', () => {
       expect(screen.getByText('65%')).toBeInTheDocument();
       // DEVIN -> Verify wind speed (new format)
       expect(screen.getByText('10')).toBeInTheDocument();
+    });
+  });
+
+  // <-- DEVIN: Test suite for theme toggle functionality
+  describe('Theme Toggle', () => {
+    // DEVIN -> Reset localStorage and document attributes before each test
+    beforeEach(() => {
+      localStorage.clear();
+      document.documentElement.removeAttribute('data-theme');
+    });
+
+    // DEVIN -> Test: Theme toggle button is rendered
+    test('theme toggle button is rendered', () => {
+      render(<App />);
+      // DEVIN -> Find toggle button by aria-label
+      const toggleButton = screen.getByLabelText(/switch to.*theme/i);
+      expect(toggleButton).toBeInTheDocument();
+    });
+
+    // DEVIN -> Test: Clicking toggle button changes theme from light to dark
+    test('clicking toggle button changes theme from light to dark', () => {
+      render(<App />);
+      const toggleButton = screen.getByLabelText(/switch to.*theme/i);
+      
+      // DEVIN -> Initial theme should be light
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+      
+      // DEVIN -> Click toggle button
+      fireEvent.click(toggleButton);
+      
+      // DEVIN -> Theme should change to dark
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    // DEVIN -> Test: Clicking toggle button twice returns to light theme
+    test('clicking toggle button twice returns to light theme', () => {
+      render(<App />);
+      const toggleButton = screen.getByLabelText(/switch to.*theme/i);
+      
+      // DEVIN -> Click toggle button twice
+      fireEvent.click(toggleButton);
+      fireEvent.click(toggleButton);
+      
+      // DEVIN -> Theme should be back to light
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    });
+
+    // DEVIN -> Test: Theme preference is saved to localStorage
+    test('theme preference is saved to localStorage', () => {
+      // DEVIN -> Spy on localStorage.setItem
+      const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
+      render(<App />);
+      
+      const toggleButton = screen.getByLabelText(/switch to.*theme/i);
+      fireEvent.click(toggleButton);
+      
+      // DEVIN -> Verify localStorage was called with correct values
+      expect(setItemSpy).toHaveBeenCalledWith('theme', 'dark');
+      setItemSpy.mockRestore();
+    });
+
+    // DEVIN -> Test: Theme is loaded from localStorage on mount
+    test('theme is loaded from localStorage on mount', () => {
+      // DEVIN -> Set dark theme in localStorage before rendering
+      localStorage.setItem('theme', 'dark');
+      
+      render(<App />);
+      
+      // DEVIN -> Theme should be dark from localStorage
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    // DEVIN -> Test: Toggle button displays correct icon for light theme
+    test('toggle button displays moon icon in light theme', () => {
+      render(<App />);
+      const toggleButton = screen.getByLabelText(/switch to dark theme/i);
+      
+      // DEVIN -> In light theme, button should show moon emoji
+      expect(toggleButton).toHaveTextContent('🌙');
+    });
+
+    // DEVIN -> Test: Toggle button displays correct icon for dark theme
+    test('toggle button displays sun icon in dark theme', () => {
+      // DEVIN -> Set dark theme in localStorage
+      localStorage.setItem('theme', 'dark');
+      
+      render(<App />);
+      const toggleButton = screen.getByLabelText(/switch to light theme/i);
+      
+      // DEVIN -> In dark theme, button should show sun emoji
+      expect(toggleButton).toHaveTextContent('☀️');
     });
   });
 });
