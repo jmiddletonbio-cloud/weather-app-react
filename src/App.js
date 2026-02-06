@@ -16,15 +16,30 @@ const defaultData = {
 function App() {
   const [data, setData] = useState(defaultData)
   const [location, setLocation] = useState('')
+  const [error, setError] = useState(null)
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${process.env.REACT_APP_WEATHER_API_KEY}`
 
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
-      axios.get(url).then((response) => {
-        setData(response.data)
-        console.log(response.data)
-      })
+      setError(null)
+      axios.get(url)
+        .then((response) => {
+          setData(response.data)
+        })
+        .catch((error) => {
+          console.error('API request failed:', error)
+          const status = error.response?.status
+          if (status === 401 || status === 403) {
+            setError('API authentication failed. Please check your API key configuration.')
+          } else if (status === 404) {
+            setError('Location not found. Please try a different city name.')
+          } else if (status >= 500) {
+            setError('Weather service is temporarily unavailable. Please try again later.')
+          } else {
+            setError('Unable to fetch weather data. Please try again.')
+          }
+        })
       setLocation('')
     }
   }
@@ -54,6 +69,12 @@ function App() {
             className="search-input"
           />
         </div>
+
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
 
         <div className="circular-display">
           <div className="circular-outer">

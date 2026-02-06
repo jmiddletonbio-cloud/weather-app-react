@@ -125,6 +125,151 @@ describe('App Component', () => {
       expect(mockedAxios.get).not.toHaveBeenCalled();
     });
 
+    // DEVIN -> Test: 401 error displays authentication error message
+    test('401 error displays API authentication error message', async () => {
+      // DEVIN -> Setup axios mock to reject with 401 error
+      mockedAxios.get.mockRejectedValueOnce({
+        response: { status: 401 }
+      });
+
+      // DEVIN -> Render the App component
+      render(<App />);
+
+      // DEVIN -> Find the input field by placeholder text
+      const inputField = screen.getByPlaceholderText('Search location...');
+
+      // DEVIN -> Simulate user typing a location
+      fireEvent.change(inputField, { target: { value: 'New York' } });
+
+      // DEVIN -> Simulate Enter key press
+      fireEvent.keyPress(inputField, {
+        key: 'Enter',
+        code: 'Enter',
+        charCode: 13
+      });
+
+      // DEVIN -> Wait for the error message to appear
+      await waitFor(() => {
+        expect(screen.getByText('API authentication failed. Please check your API key configuration.')).toBeInTheDocument();
+      });
+    });
+
+    // DEVIN -> Test: 403 error displays authentication error message
+    test('403 error displays API authentication error message', async () => {
+      // DEVIN -> Setup axios mock to reject with 403 error
+      mockedAxios.get.mockRejectedValueOnce({
+        response: { status: 403 }
+      });
+
+      // DEVIN -> Render the App component
+      render(<App />);
+
+      // DEVIN -> Find the input field by placeholder text
+      const inputField = screen.getByPlaceholderText('Search location...');
+
+      // DEVIN -> Simulate user typing a location
+      fireEvent.change(inputField, { target: { value: 'New York' } });
+
+      // DEVIN -> Simulate Enter key press
+      fireEvent.keyPress(inputField, {
+        key: 'Enter',
+        code: 'Enter',
+        charCode: 13
+      });
+
+      // DEVIN -> Wait for the error message to appear
+      await waitFor(() => {
+        expect(screen.getByText('API authentication failed. Please check your API key configuration.')).toBeInTheDocument();
+      });
+    });
+
+    // DEVIN -> Test: 404 error displays location not found message
+    test('404 error displays location not found message', async () => {
+      // DEVIN -> Setup axios mock to reject with 404 error
+      mockedAxios.get.mockRejectedValueOnce({
+        response: { status: 404 }
+      });
+
+      // DEVIN -> Render the App component
+      render(<App />);
+
+      // DEVIN -> Find the input field by placeholder text
+      const inputField = screen.getByPlaceholderText('Search location...');
+
+      // DEVIN -> Simulate user typing an invalid location
+      fireEvent.change(inputField, { target: { value: 'InvalidCity123' } });
+
+      // DEVIN -> Simulate Enter key press
+      fireEvent.keyPress(inputField, {
+        key: 'Enter',
+        code: 'Enter',
+        charCode: 13
+      });
+
+      // DEVIN -> Wait for the error message to appear
+      await waitFor(() => {
+        expect(screen.getByText('Location not found. Please try a different city name.')).toBeInTheDocument();
+      });
+    });
+
+    // DEVIN -> Test: 500 error displays server error message
+    test('500 error displays server unavailable message', async () => {
+      // DEVIN -> Setup axios mock to reject with 500 error
+      mockedAxios.get.mockRejectedValueOnce({
+        response: { status: 500 }
+      });
+
+      // DEVIN -> Render the App component
+      render(<App />);
+
+      // DEVIN -> Find the input field by placeholder text
+      const inputField = screen.getByPlaceholderText('Search location...');
+
+      // DEVIN -> Simulate user typing a location
+      fireEvent.change(inputField, { target: { value: 'New York' } });
+
+      // DEVIN -> Simulate Enter key press
+      fireEvent.keyPress(inputField, {
+        key: 'Enter',
+        code: 'Enter',
+        charCode: 13
+      });
+
+      // DEVIN -> Wait for the error message to appear
+      await waitFor(() => {
+        expect(screen.getByText('Weather service is temporarily unavailable. Please try again later.')).toBeInTheDocument();
+      });
+    });
+
+    // DEVIN -> Test: Network error displays generic error message
+    test('Network error displays generic error message', async () => {
+      // DEVIN -> Setup axios mock to reject with network error (no response)
+      mockedAxios.get.mockRejectedValueOnce({
+        message: 'Network Error'
+      });
+
+      // DEVIN -> Render the App component
+      render(<App />);
+
+      // DEVIN -> Find the input field by placeholder text
+      const inputField = screen.getByPlaceholderText('Search location...');
+
+      // DEVIN -> Simulate user typing a location
+      fireEvent.change(inputField, { target: { value: 'New York' } });
+
+      // DEVIN -> Simulate Enter key press
+      fireEvent.keyPress(inputField, {
+        key: 'Enter',
+        code: 'Enter',
+        charCode: 13
+      });
+
+      // DEVIN -> Wait for the error message to appear
+      await waitFor(() => {
+        expect(screen.getByText('Unable to fetch weather data. Please try again.')).toBeInTheDocument();
+      });
+    });
+
     // DEVIN -> Test: State updates after successful search
     test('Input field is cleared after successful search', async () => {
       // DEVIN -> Setup axios mock to resolve with weather data
