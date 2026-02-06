@@ -64,6 +64,18 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
 }
 
+.error-message {
+  width: 100%;
+  padding: 12px 20px;
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  border-radius: 12px;
+  color: #ff3b30;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 500;
+}
+
 .circular-display {
   display: flex;
   justify-content: center;

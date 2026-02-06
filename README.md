@@ -1,6 +1,29 @@
-# Getting Started with Create React App
+# Weather App React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based weather application with a glassmorphism UI that displays current weather conditions for any location.
+
+## API Key Setup
+
+This application uses the [OpenWeatherMap API](https://openweathermap.org/api) to fetch weather data.
+
+### Setting Up Your API Key
+
+1. Sign up for a free API key at [OpenWeatherMap](https://openweathermap.org/api)
+2. Copy the `.env.example` file to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+3. Add your API key to the `.env` file:
+   ```
+   REACT_APP_WEATHER_API_KEY=your_api_key_here
+   ```
+
+### Security Notes
+
+- The `.env` file is git-ignored and should never be committed to version control
+- For production deployments, configure the API key through your CI/CD environment variables (e.g., GitHub Secrets)
+- The API key is embedded in the client-side bundle at build time, which is expected for OpenWeatherMap's architecture
+- For production use, configure domain restrictions and rate limiting in your OpenWeatherMap dashboard to protect your API key
 
 ## Available Scripts
 
